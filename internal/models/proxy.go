@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"strings"
 
-	gojson "github.com/goccy/go-json"
 	"github.com/gocolly/colly"
 	"github.com/sirupsen/logrus"
 )
@@ -26,24 +25,25 @@ func FindProxy(total string) ([]ProxyHttpResponse, string) {
 	if len(proxyList) == 0 {
 		ParceProxy()
 	}
-	fmt.Println(len(proxyList))
-	out, _ := gojson.Marshal(proxyList)
-	fmt.Println(string(out))
-	i, err := strconv.Atoi(total)
+
+	t, err := strconv.Atoi(total)
 	if err != nil {
 		logrus.Errorf("Err str to int - %s", err)
 		return nil, "Err invalid query"
 	}
 
+	if t > len(proxyList) {
+		return nil, "Query out of range"
+	}
+
 	for idx, val := range proxyList {
 		data = append(data, val)
 		proxyList = append(proxyList[:idx], proxyList[idx+1:]...)
-		if idx == i-1 {
+		if idx == t-1 {
 			break
 		}
 	}
 
-	fmt.Println(len(proxyList))
 	return data, "Success"
 }
 
@@ -78,5 +78,3 @@ func ParceProxy() {
 		i += 64
 	}
 }
-
-// func DeliteUsed()
