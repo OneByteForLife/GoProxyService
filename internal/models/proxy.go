@@ -10,11 +10,11 @@ import (
 )
 
 type ProxyHttpResponse struct {
-	Type string
+	Type string `json:"type"`
 	Data struct {
-		IP   string
-		Port string
-	}
+		IP   string `json:"ip"`
+		Port string `json:"port"`
+	} `json:"data"`
 }
 
 var proxyList []ProxyHttpResponse
