@@ -65,8 +65,8 @@ func ParceProxy() {
 				proxyList = append(proxyList, ProxyHttpResponse{
 					Type: proxyType,
 					Data: struct {
-						IP   string
-						Port string
+						IP   string "json:\"ip\""
+						Port string "json:\"port\""
 					}{
 						IP:   ip,
 						Port: port,
@@ -74,7 +74,9 @@ func ParceProxy() {
 				})
 			}
 		})
+		// Требуется обновлять Cookie
 		c.Visit(fmt.Sprintf("https://hidemy.name/ru/proxy-list/?maxtime=100&type=h&anon=1&start=%s#list", strconv.Itoa(i)))
 		i += 64
 	}
+	fmt.Println(proxyList)
 }
