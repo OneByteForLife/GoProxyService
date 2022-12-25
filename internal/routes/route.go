@@ -18,7 +18,7 @@ func RespStatus(api string, status int, description string, content interface{})
 func FindProxyToTotal(c *fiber.Ctx) error {
 	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSONCharsetUTF8)
 
-	data, massage := models.FindProxy(c.Query("total", "1"))
+	data, massage := models.FindProxy(c.Query("total"))
 	if data == nil {
 		return c.Status(fiber.StatusBadRequest).JSON(RespStatus("1.0", fiber.StatusBadRequest, massage, data))
 	}
