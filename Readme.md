@@ -44,11 +44,9 @@ URL - http://localhost:80
     "api_version": "1.0",
     "content": [
         {
-            "Type": "HTTP",
-            "Data": {
-                "IP": "203.13.32.73",
-                "Port": "80"
-            }
+            "Ip": "103.149.146.116",
+            "Port": 80,
+            "Ping": 480
         }
     ],
     "description": "Success",
