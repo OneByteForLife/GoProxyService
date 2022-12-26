@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"GoProxyService/internal/models"
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -15,13 +13,8 @@ func RespStatus(api string, status int, description string, content interface{})
 	}
 }
 
-func FindProxyToTotal(c *fiber.Ctx) error {
+func SavingData(c *fiber.Ctx) error {
 	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSONCharsetUTF8)
 
-	data, massage := models.FindProxy(c.Query("total"))
-	if data == nil {
-		return c.Status(fiber.StatusBadRequest).JSON(RespStatus("1.0", fiber.StatusBadRequest, massage, data))
-	}
-
-	return c.Status(fiber.StatusOK).JSON(RespStatus("1.0", fiber.StatusOK, massage, data))
+	return c.Status(fiber.StatusOK).JSON(RespStatus("1.0", fiber.StatusOK, "Success", c.Body()))
 }

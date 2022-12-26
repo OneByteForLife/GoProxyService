@@ -12,7 +12,7 @@ import (
 )
 
 func SetUpRoutes(app *fiber.App) {
-	app.Get("api/v1/get", routes.FindProxyToTotal)
+	app.Post("api/v1/add", middleware.CheckContentType(), routes.SavingData)
 }
 
 func Run() {

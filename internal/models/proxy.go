@@ -1,72 +1,46 @@
 package models
 
 import (
-	"crypto/tls"
-	"io"
-	"net/http"
-	"strconv"
-
 	gojson "github.com/goccy/go-json"
 	"github.com/sirupsen/logrus"
 )
 
-type ProxyHttpResponse struct {
-	IP   string `json:"Ip"`
-	Port int    `json:"Port"`
-	Ping int    `json:"Ping"`
+/*
+	Алгоритм прост
+	1 - Собираем прокси (Единоразовая операция отдельный сервис)
+	2 - Проверяем все прокси перед сохранением
+	3 - Валидные добавляем в бд
+	4 - Добавляем время последней проверки
+	5 - Каждые n минут проверяем прокси в базе и удаляем невалидные
+	6 - Каждые 3 часов база с прокси обновляется
+*/
+
+type ProxyData struct {
+	Types []string `json:"protocols"`
+	Data  struct {
+		IP      string `json:"ip"`
+		Port    string `json:"port"`
+		Speed   int    `json:"speed"`
+		AnonLvL string `json:"anon_lvl"`
+		Geo     struct {
+			City    string `json:"city"`
+			Country string `json:"country"`
+		} `json:"geo"`
+	} `json:"data"`
 }
 
-var proxyList []ProxyHttpResponse
+func SaveData(body []byte) string {
+	var pd []ProxyData
 
-func FindProxy(total string) ([]ProxyHttpResponse, string) {
-	var data []ProxyHttpResponse
-
-	if len(proxyList) == 0 {
-		ParceProxy()
+	if err := gojson.Unmarshal(body, &pd); err != nil {
+		logrus.Errorf("Err unmarshal proxy data - %s", err)
+		return "Incorrect data"
 	}
 
-	t, err := strconv.Atoi(total)
-	if err != nil {
-		logrus.Errorf("Err str to int - %s", err)
-		return nil, "Err invalid query"
-	}
+	/*
+		Проверка прокси
+			Сохранение в базу
+	*/
 
-	if t > len(proxyList) {
-		return nil, "Query out of range"
-	}
-
-	for idx, val := range proxyList {
-		data = append(data, val)
-		proxyList = append(proxyList[:idx], proxyList[idx+1:]...)
-		if idx == t-1 {
-			break
-		}
-	}
-
-	return data, "Success"
-}
-
-func ParceProxy() {
-	client := &http.Client{Transport: &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}}
-
-	resp, err := client.Get("https://www.proxyscan.io/api/proxy?type=http")
-	if err != nil {
-		logrus.Errorf("Err request proxy - %s", err)
-		return
-	}
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		logrus.Errorf("Err read response body - %s", err)
-		return
-	}
-
-	err = gojson.Unmarshal(data, &proxyList)
-	if err != nil {
-		logrus.Errorf("Err unmarshal body to struct - %s", err)
-		return
-	}
+	return "Success savind"
 }
