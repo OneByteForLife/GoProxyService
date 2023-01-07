@@ -5,16 +5,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-/*
-	Алгоритм прост
-	1 - Собираем прокси (Единоразовая операция отдельный сервис)
-	2 - Проверяем все прокси перед сохранением
-	3 - Валидные добавляем в бд
-	4 - Добавляем время последней проверки
-	5 - Каждые n минут проверяем прокси в базе и удаляем невалидные
-	6 - Каждые 3 часов база с прокси обновляется
-*/
-
 type ProxyData struct {
 	Types []string `json:"protocols"`
 	Data  struct {
@@ -42,5 +32,5 @@ func SaveData(body []byte) string {
 			Сохранение в базу
 	*/
 
-	return "Success savind"
+	return "Success saving"
 }
