@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"os"
+
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v2"
 )
@@ -8,7 +10,7 @@ import (
 func CheckJwtToken() fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		ErrorHandler: jwtError,
-		SigningKey:   []byte("THISISONEBYTEFORLIFE"),
+		SigningKey:   []byte(os.Getenv("JWT_SECRET")),
 	})
 }
 
