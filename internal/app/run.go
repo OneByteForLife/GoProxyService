@@ -28,7 +28,7 @@ func Run() {
 
 	SetUpRoutes(app)
 
-	if err := app.Listen(":80"); err != nil {
+	if err := app.Listen(":8080"); err != nil {
 		logrus.Fatalf("Err up server - %s", err)
 	}
 
