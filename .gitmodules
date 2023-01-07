@@ -1,0 +1,3 @@
+[submodule "GoAsyncProxyParser"]
+	path = GoAsyncProxyParser
+	url = https://github.com/nameerror3301/GoAsyncProxyParser.git
