@@ -2,6 +2,7 @@ package app
 
 import (
 	"GoProxyService/internal/middleware"
+	"GoProxyService/internal/models"
 	"GoProxyService/internal/routes"
 	"time"
 
@@ -28,9 +29,23 @@ func Run() {
 
 	SetUpRoutes(app)
 
+	go Cron()
+
 	if err := app.Listen(":8080"); err != nil {
 		logrus.Fatalf("Err up server - %s", err)
 	}
 
 	logrus.Info("Service is up!")
+}
+
+func Cron() {
+	for {
+		time.Sleep(time.Minute * 2)
+		if count := models.CheckList(); count == 0 {
+			logrus.Infof("Proxy count from check - %d", count)
+			return
+		} else {
+			logrus.Infof("Proxy count from check - %d", count)
+		}
+	}
 }
