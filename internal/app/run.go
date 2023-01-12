@@ -41,11 +41,7 @@ func Run() {
 func Cron() {
 	for {
 		time.Sleep(time.Minute * 2)
-		if count := models.CheckList(); count == 0 {
-			logrus.Infof("Proxy count from check - %d", count)
-			return
-		} else {
-			logrus.Infof("Proxy count from check - %d", count)
-		}
+		count := models.CheckList()
+		logrus.Infof("Proxy count from check - %d", count)
 	}
 }
