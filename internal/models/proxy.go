@@ -1,6 +1,8 @@
 package models
 
 import (
+	"GoProxyService/internal/database"
+
 	gojson "github.com/goccy/go-json"
 	"github.com/sirupsen/logrus"
 )
@@ -27,10 +29,20 @@ func SaveData(body []byte) string {
 		return "Incorrect data"
 	}
 
-	/*
-		Проверка прокси
-			Сохранение в базу
-	*/
+	logrus.Infof("%d objects were accepted", len(pd))
 
+	db, err := database.ConnectDataBase()
+	if err != nil {
+		logrus.Error(err)
+		return "Err saving data"
+	}
+
+	query := "INSERT INTO proxy_list (types, ip, port, speed, anonlvl, city, country) VALUES($1, $2, $3, $4, $5, $6, $7)"
+	for _, val := range pd {
+		if _, err := db.Exec(query, val.Types[0], val.Data.IP, val.Data.Port, val.Data.Speed, val.Data.AnonLvL, val.Data.Geo.City, val.Data.Geo.Country); err != nil {
+			logrus.Errorf("Err write data to database - %s", err)
+			return "Err saving data"
+		}
+	}
 	return "Success saving"
 }
