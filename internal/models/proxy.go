@@ -22,13 +22,6 @@ type ProxyData struct {
 	} `json:"data"`
 }
 
-type ProxyFromCheck struct {
-	ID   int    `json:"id"`
-	Type string `json:"protocol"`
-	IP   string `json:"ip"`
-	Port string `json:"port"`
-}
-
 func SaveData(body []byte) string {
 	var pd []ProxyData
 
@@ -53,33 +46,4 @@ func SaveData(body []byte) string {
 		}
 	}
 	return "Success saving"
-}
-
-func CheckList() int {
-	logrus.Info("Runing process for check proxy_list")
-
-	db, err := database.ConnectDataBase()
-	if err != nil {
-		logrus.Error(err)
-		return 0
-	}
-
-	query := "SELECT id, types, ip, port FROM proxy_list"
-	rows, err := db.Query(query)
-	if err != nil {
-		logrus.Errorf("Err send query to db - %s", err)
-	}
-
-	var list []ProxyFromCheck
-	for rows.Next() {
-		var p ProxyFromCheck
-		err := rows.Scan(&p.ID, &p.Type, &p.IP, &p.Port)
-		if err != nil {
-			logrus.Errorf("Err scan rows to struct - %s", err)
-			return 0
-		}
-		list = append(list, p)
-	}
-
-	return len(list)
 }
