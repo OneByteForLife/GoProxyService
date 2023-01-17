@@ -18,14 +18,26 @@ services:
     networks:
       - in.net.ex
 
-  # Инструкция для сборщика прокси 
+  # Инструкция для сборщика прокси  GoProxyChecker
   go-proxy-parser:
+    build: ./GoProxyChecker/
+    container_name: proxy-checker.in.net.ex
+    volumes:
+      - ./GoProxyChecker/internal/config/config.yaml:/config.yaml:ro
+    networks:
+      - in.net.ex
+    depends_on:
+      - go-storage
+
+  go-proxy-checker:
     build: ./GoAsyncProxyParser/
     container_name: proxy-parser.in.net.ex
     volumes:
       - ./GoAsyncProxyParser/internal/config/config.yaml:/config.yaml:ro
     networks:
       - in.net.ex
+    depends_on:
+      - go-storage
 
   # Инструкция для базы
   go-storage:
