@@ -5,7 +5,7 @@ networks:
     driver: bridge
 
 services:
-  # Инструкция для сервиса по выдаче прокси
+  # Инструкция для api по выдаче прокси
   go-proxy-service:
     build: .
     container_name: proxy-service.in.net.ex
@@ -18,26 +18,27 @@ services:
     networks:
       - in.net.ex
 
-  # Инструкция для сборщика прокси  GoProxyChecker
+  # Инструкция для сборщика прокси 
   go-proxy-parser:
-    build: ./GoProxyChecker/
-    container_name: proxy-checker.in.net.ex
-    volumes:
-      - ./GoProxyChecker/internal/config/config.yaml:/config.yaml:ro
-    networks:
-      - in.net.ex
-    depends_on:
-      - go-storage
-
-  go-proxy-checker:
     build: ./GoAsyncProxyParser/
-    container_name: proxy-parser.in.net.ex
+    container_name: proxy-parcer.in.net.ex
     volumes:
       - ./GoAsyncProxyParser/internal/config/config.yaml:/config.yaml:ro
     networks:
       - in.net.ex
     depends_on:
       - go-storage
+
+  # Иструкция для чекера прокси
+  go-proxy-checker:
+    build: ./GoProxyChecker/
+    container_name: proxy-checker.in.net.ex
+    volumes:
+      - ./GoProxyChecker/pkg/config/config.yaml:/config.yaml:ro
+    networks:
+      - in.net.ex
+    depends_on:
+      - go-proxy-parser
 
   # Инструкция для базы
   go-storage:
