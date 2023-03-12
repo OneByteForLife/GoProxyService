@@ -35,12 +35,6 @@ func NewStorage(db *sql.DB) Storage {
 
 func (s *ProxyStorage) SaveData(data []entity.ProxyData) error {
 	for _, val := range data {
-		tx, err := s.db.Begin()
-		if err != nil {
-			tx.Rollback()
-			return err
-		}
-
 		ds := goqu.Insert(proxy_list).Cols(types, ip, port, speed, anonlvl, city, country, last_check).Vals(
 			goqu.Vals{
 				&val.Types[0],
@@ -56,9 +50,8 @@ func (s *ProxyStorage) SaveData(data []entity.ProxyData) error {
 
 		q, _, _ := ds.ToSQL()
 
-		_, err = tx.Exec(q)
+		_, err := s.db.Exec(q)
 		if err != nil {
-			tx.Rollback()
 			return err
 		}
 	}
