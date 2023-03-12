@@ -1,7 +1,7 @@
 package database
 
 import (
-	"GoProxyService/internal/config"
+	"GoProxyService/config"
 	"database/sql"
 	"fmt"
 
@@ -20,7 +20,7 @@ func ConnectDataBase() (*sql.DB, error) {
 		conf.Database.Dbname,
 		conf.Database.Sslmode))
 	if err != nil {
-		logrus.Errorf("Err open connect to database - %s", err)
+		logrus.Errorf("error open connect to database: %v", err)
 		return nil, err
 	}
 	return db, nil

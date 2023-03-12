@@ -8,9 +8,13 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 )
 
-require gopkg.in/yaml.v3 v3.0.1 // indirect
+require (
+	github.com/doug-martin/goqu/v9 v9.18.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
 
 require (
+	clevergo.tech/jsend v1.1.3
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/gofiber/jwt/v2 v2.2.7
 	github.com/golang-jwt/jwt/v4 v4.4.3 // indirect

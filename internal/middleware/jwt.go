@@ -3,6 +3,7 @@ package middleware
 import (
 	"os"
 
+	"clevergo.tech/jsend"
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v2"
 )
@@ -15,5 +16,5 @@ func CheckJwtToken() fiber.Handler {
 }
 
 func jwtError(c *fiber.Ctx, err error) error {
-	return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"api_version": "1.0", "status_code": fiber.StatusUnauthorized, "description": "Incorrect or invalid access token!"})
+	return c.Status(fiber.StatusUnauthorized).JSON(jsend.NewError("error invalid jwt token", fiber.StatusUnauthorized, nil))
 }
