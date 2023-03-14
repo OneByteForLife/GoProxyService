@@ -1,6 +1,6 @@
-[submodule "GoAsyncProxyParser"]
-	path = GoAsyncProxyParser
-	url = https://github.com/nameerror3301/GoAsyncProxyParser.git
 [submodule "GoProxyChecker"]
 	path = GoProxyChecker
 	url = https://github.com/OneByteForLife/GoProxyChecker.git
+[submodule "GoAsyncProxyParser"]
+	path = GoAsyncProxyParser
+	url = https://github.com/OneByteForLife/GoAsyncProxyParser.git
