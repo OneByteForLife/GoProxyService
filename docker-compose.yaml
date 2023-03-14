@@ -5,16 +5,14 @@ networks:
     driver: bridge
 
 services:
-  # Инструкция для api по выдаче прокси
+  # Инструкция для api
   go-proxy-service:
     build: .
     container_name: proxy-service.in.net.ex
     environment:
       - JWT_SECRET=THISISONEBYTEFORLIFE
-    ports:
-      - 8080:8080
     volumes:
-      - ./internal/config/config.yaml:/config.yaml:ro
+      - ./config/config.yaml:/config.yaml:ro
     networks:
       - in.net.ex
 
@@ -27,7 +25,7 @@ services:
     networks:
       - in.net.ex
     depends_on:
-      - go-storage
+      - go-proxy-service
 
   # Иструкция для чекера прокси
   go-proxy-checker:
@@ -50,8 +48,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=qwerty
       - PGDATA=/var/lib/postgresql/data/pgdata
-    # volumes:
-    #   - ./database:/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./database:/var/lib/postgresql/data/pgdata
     ports:
       - 5432:5432
     networks:
